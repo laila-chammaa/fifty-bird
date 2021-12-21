@@ -32,7 +32,9 @@ function PlayState:update(dt)
     self.timer = self.timer + dt
 
     -- spawn a new pipe pair every second and a half
-    if self.timer > 2 then
+    -- Randomize the interval at which pairs of pipes spawn
+    pipe_interval = math.random(2, 8)
+    if self.timer > pipe_interval then
         -- modify the last Y coordinate we placed so pipe gaps aren't too far apart
         -- no higher than 10 pixels below the top edge of the screen,
         -- and no lower than a gap length (90 pixels) from the bottom
@@ -99,6 +101,16 @@ function PlayState:update(dt)
             score = self.score
         })
     end
+
+    -- pause game if user pressed p
+    if love.keyboard.wasPressed('p') then
+        sounds['explosion']:play()
+        sounds['music']:pause()
+        gStateMachine:change('pause', {
+            pausedGame = self
+        })
+    end
+
 end
 
 function PlayState:render()
@@ -115,9 +127,17 @@ end
 --[[
     Called when this state is transitioned to from another state.
 ]]
-function PlayState:enter()
+function PlayState:enter(params)
     -- if we're coming from death, restart scrolling
     scrolling = true
+
+    -- if we're coming from pause, start off the same
+    if params ~= nil then
+        self.timer = params.play.timer
+        self.bird = params.play.bird
+        self.score = params.play.score
+        self.pipePairs = params.play.pipePairs
+    end
 end
 
 --[[

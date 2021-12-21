@@ -39,6 +39,7 @@ require 'states/BaseState'
 require 'states/CountdownState'
 require 'states/PlayState'
 require 'states/ScoreState'
+require 'states/PauseState'
 require 'states/TitleScreenState'
 
 require 'Bird'
@@ -57,6 +58,7 @@ local background = love.graphics.newImage('background.png')
 local backgroundScroll = 0
 
 local ground = love.graphics.newImage('ground.png')
+
 local groundScroll = 0
 
 local BACKGROUND_SCROLL_SPEED = 30
@@ -82,6 +84,12 @@ function love.load()
     mediumFont = love.graphics.newFont('flappy.ttf', 14)
     flappyFont = love.graphics.newFont('flappy.ttf', 28)
     hugeFont = love.graphics.newFont('flappy.ttf', 56)
+
+    pauseIcon = love.graphics.newImage('pause.png')
+    medal1 = love.graphics.newImage('medal1.png')
+    medal2 = love.graphics.newImage('medal2.png')
+    medal3 = love.graphics.newImage('medal3.png')
+
     love.graphics.setFont(flappyFont)
 
     -- initialize our table of sounds
@@ -111,6 +119,7 @@ function love.load()
         ['title'] = function() return TitleScreenState() end,
         ['countdown'] = function() return CountdownState() end,
         ['play'] = function() return PlayState() end,
+        ['pause'] = function() return PauseState() end,
         ['score'] = function() return ScoreState() end
     }
     gStateMachine:change('title')
