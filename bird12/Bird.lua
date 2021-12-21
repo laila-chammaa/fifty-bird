@@ -6,16 +6,16 @@
     The Bird is what we control in the game via clicking or the space bar; whenever we press either,
     the bird will flap and go up a little bit, where it will then be affected by gravity. If the bird hits
     the ground or a pipe, the game is over.
-]]
+]] Bird = Class {}
 
-Bird = Class{}
-
-local GRAVITY = 10
+local gravity = 10
+local jump = 2
 
 function Bird:init()
     self.image = love.graphics.newImage('bird.png')
     self.x = VIRTUAL_WIDTH / 2 - 8
     self.y = VIRTUAL_HEIGHT / 2 - 8
+    self.difficulty = 1
 
     self.width = self.image:getWidth()
     self.height = self.image:getHeight()
@@ -42,10 +42,21 @@ function Bird:collides(pipe)
 end
 
 function Bird:update(dt)
-    self.dy = self.dy + GRAVITY * dt
+    if self.difficulty == 1 then
+        gravity = 10
+        jump = 2
+    elseif self.difficulty == 2 then
+        gravity = 15
+        jump = 4
+    elseif self.difficulty == 3 then
+        gravity = 20
+        jump = 5
+    end
+
+    self.dy = self.dy + gravity * dt
 
     if love.keyboard.wasPressed('space') or love.mouse.wasPressed(1) then
-        self.dy = -2
+        self.dy = -jump
         sounds['jump']:play()
     end
 

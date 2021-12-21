@@ -15,9 +15,7 @@
     for years prior. Illustrates some of the most basic procedural generation of game
     levels possible as by having pipes stick out of the ground by varying amounts, acting
     as an infinitely generated obstacle course for the player.
-]]
-
--- push is a library that will allow us to draw our game at a virtual
+]] -- push is a library that will allow us to draw our game at a virtual
 -- resolution, instead of however large our window is; used to provide
 -- a more retro aesthetic
 --
@@ -40,6 +38,7 @@ require 'states/CountdownState'
 require 'states/PlayState'
 require 'states/ScoreState'
 require 'states/PauseState'
+require 'states/DifficultyState'
 require 'states/TitleScreenState'
 
 require 'Bird'
@@ -72,7 +71,7 @@ scrolling = true
 function love.load()
     -- initialize our nearest-neighbor filter
     love.graphics.setDefaultFilter('nearest', 'nearest')
-    
+
     -- seed the RNG
     math.randomseed(os.time())
 
@@ -116,11 +115,24 @@ function love.load()
 
     -- initialize state machine with all state-returning functions
     gStateMachine = StateMachine {
-        ['title'] = function() return TitleScreenState() end,
-        ['countdown'] = function() return CountdownState() end,
-        ['play'] = function() return PlayState() end,
-        ['pause'] = function() return PauseState() end,
-        ['score'] = function() return ScoreState() end
+        ['title'] = function()
+            return TitleScreenState()
+        end,
+        ['countdown'] = function()
+            return CountdownState()
+        end,
+        ['play'] = function()
+            return PlayState()
+        end,
+        ['pause'] = function()
+            return PauseState()
+        end,
+        ['difficulty'] = function()
+            return DifficultyState()
+        end,
+        ['score'] = function()
+            return ScoreState()
+        end
     }
     gStateMachine:change('title')
 
@@ -177,10 +189,10 @@ end
 
 function love.draw()
     push:start()
-    
+
     love.graphics.draw(background, -backgroundScroll, 0)
     gStateMachine:render()
     love.graphics.draw(ground, -groundScroll, VIRTUAL_HEIGHT - 16)
-    
+
     push:finish()
 end

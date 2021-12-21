@@ -6,9 +6,9 @@
 
     The TitleScreenState is the starting screen of the game, shown on startup. It should
     display "Press Enter" and also our highest score.
-]]
-
-TitleScreenState = Class{__includes = BaseState}
+]] TitleScreenState = Class {
+    __includes = BaseState
+}
 
 function TitleScreenState:init()
     -- nothing

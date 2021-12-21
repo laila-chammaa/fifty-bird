@@ -6,9 +6,9 @@
     Counts down visually on the screen (3,2,1) so that the player knows the
     game is about to begin. Transitions to the PlayState as soon as the
     countdown is complete.
-]]
-
-CountdownState = Class{__includes = BaseState}
+]] CountdownState = Class {
+    __includes = BaseState
+}
 
 -- takes 1 second to count down each time
 COUNTDOWN_TIME = 0.75
@@ -31,7 +31,7 @@ function CountdownState:update(dt)
         self.count = self.count - 1
 
         if self.count == 0 then
-            gStateMachine:change('play')
+            gStateMachine:change('difficulty')
         end
     end
 end
